@@ -18,6 +18,9 @@ public class Course {
         this.averageRating = null; // Initially, there may be no reviews
     }
 
+    public Course() {
+    }
+
     public int getCourseID() {
         return courseID;
     }
