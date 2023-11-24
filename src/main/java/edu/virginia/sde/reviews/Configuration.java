@@ -30,7 +30,6 @@ public class Configuration {
     private void parseJsonConfigFile() {
         try (InputStream inputStream = Objects.requireNonNull(Configuration.class.getResourceAsStream(configurationFilename));
              BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            //TODO: Parse config.json to set the three fields
 
             StringBuilder sb = new StringBuilder();
             String line;

@@ -28,6 +28,7 @@ public class LoginController {
         this.dbDriver = new DatabaseDriver(configuration.getDatabaseFilename());
         try {
             this.dbDriver.connect();
+            this.dbDriver.createTables();
         } catch (SQLException e) {
             messageLabel.setText("Unable to connect to database.");
         }
@@ -86,6 +87,7 @@ public class LoginController {
             } catch (SQLException ex) {
                 messageLabel.setText("Error while creating user.");
             }
+            e.printStackTrace();
             messageLabel.setText("Error while creating user.");
         }
 

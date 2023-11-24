@@ -25,7 +25,7 @@
         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
         <!-- Error Message -->
-        <Label fx:id="errorMessage" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" textFill="red"/>
+        <Label fx:id="messageLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" textFill="red"/>
 
         <!-- Buttons -->
         <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2">
