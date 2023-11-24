@@ -6,8 +6,8 @@ public class Review {
 
 
     private int id;
-    private int userId;
-    private int courseId;
+    private int userID;
+    private int courseID;
     private int rating;
     private Timestamp entryTime;
     private String comment;
@@ -15,10 +15,10 @@ public class Review {
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     // Constructor
-    public Review(int id, int userId, int courseId, int rating, Timestamp entryTime, String comment) {
+    public Review(int id, int userID, int courseID, int rating, Timestamp entryTime, String comment) {
         this.id = id;
-        this.userId = userId;
-        this.courseId = courseId;
+        this.userID = userID;
+        this.courseID = courseID;
         this.rating = rating;
         this.entryTime = entryTime;
         this.comment = comment;
@@ -35,20 +35,20 @@ public class Review {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public int getCourseId() {
-        return courseId;
+    public int getCourseID() {
+        return courseID;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
     }
 
     public int getRating() {
@@ -87,8 +87,8 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", courseId=" + courseId +
+                ", userId=" + userID +
+                ", courseId=" + courseID +
                 ", rating=" + rating +
                 ", entryTime=" + entryTime +
                 ", comment='" + comment + '\'' +

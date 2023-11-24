@@ -493,8 +493,8 @@ public class DatabaseDriver {
             String command = "INSERT INTO Reviews(UserID, CourseID, Rating, EntryTime, Comment) " +
                     "VALUES(?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(command)) {
-                statement.setInt(1, review.getUserId());
-                statement.setInt(2, review.getCourseId());
+                statement.setInt(1, review.getUserID());
+                statement.setInt(2, review.getCourseID());
                 statement.setInt(3, review.getRating());
                 statement.setTimestamp(4, review.getEntryTime());
                 if (review.getComment() != null) {
@@ -563,15 +563,15 @@ public class DatabaseDriver {
             }
 
             // Use the Course ID and User ID from the old review to identify the review to update
-            statement.setInt(4, oldReview.getCourseId());
-            statement.setInt(5, oldReview.getUserId());
+            statement.setInt(4, oldReview.getCourseID());
+            statement.setInt(5, oldReview.getUserID());
 
             int rowsAffected = statement.executeUpdate();
             statement.close();
 
             if (rowsAffected == 0) {
-                throw new SQLException("No review found for Course ID: " + oldReview.getCourseId()
-                        + " and User ID: " + oldReview.getUserId());
+                throw new SQLException("No review found for Course ID: " + oldReview.getCourseID()
+                        + " and User ID: " + oldReview.getUserID());
             }
         } catch (SQLException e) {
             rollback();
@@ -619,14 +619,14 @@ public class DatabaseDriver {
                 if (resultSet.next()) {
                     int id = resultSet.getInt("ID");
                     int userid = resultSet.getInt("UserID");
-                    int courseid = resultSet.getInt("CourseID");
+                    int courseID = resultSet.getInt("CourseID");
                     int rating = resultSet.getInt("Rating");
                     Timestamp time = resultSet.getTimestamp("EntryTime");
                     String comment = resultSet.getString("Comment");
                     if (resultSet.wasNull()) {
                         comment = null;
                     }
-                    Review review = new Review(id, userid, courseid, rating, time, comment);
+                    Review review = new Review(id, userid, courseID, rating, time, comment);
                     return Optional.of(review);
                 } else {
                     return Optional.empty();
@@ -788,6 +788,5 @@ public class DatabaseDriver {
             throw e;
         }
     }
-
 
 }
