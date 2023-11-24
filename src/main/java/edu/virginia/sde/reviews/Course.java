@@ -63,12 +63,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
-                "courseID=" + courseID +
-                ", subject='" + subject + '\'' +
-                ", courseNumber=" + courseNumber +
-                ", title='" + title + '\'' +
-                ", averageRating=" + averageRating +
-                '}';
+        String ratingStr = averageRating != null ? String.format(" - Avg Rating: %.2f", averageRating) : "";
+        return subject + " " + courseNumber + ": " + title + ratingStr;
     }
 }
