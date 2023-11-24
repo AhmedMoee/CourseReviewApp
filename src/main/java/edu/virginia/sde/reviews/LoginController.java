@@ -22,10 +22,10 @@ public class LoginController {
     private Label messageLabel;
 
     private final DatabaseDriver dbDriver;
-    private final String dbPath = "jdbc:sqlite:identifier.sqlite.db";
 
     public LoginController() {
-        this.dbDriver = new DatabaseDriver(dbPath);
+        Configuration configuration = new Configuration();
+        this.dbDriver = new DatabaseDriver(configuration.getDatabaseFilename());
         try {
             this.dbDriver.connect();
         } catch (SQLException e) {
@@ -34,7 +34,7 @@ public class LoginController {
     }
 
     @FXML
-    protected void handleLogin(ActionEvent event) {
+    public void handleLogin(javafx.event.ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -63,7 +63,7 @@ public class LoginController {
     }
 
     @FXML
-    protected void handleCreateUser(ActionEvent event) {
+    protected void handleCreateUser(javafx.event.ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
