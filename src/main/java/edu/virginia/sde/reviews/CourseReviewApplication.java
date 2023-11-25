@@ -2,9 +2,11 @@ package edu.virginia.sde.reviews;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class CourseReviewApplication extends Application {
@@ -29,9 +31,15 @@ public class CourseReviewApplication extends Application {
     }
 
     public void switchToCourseSearch() throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CourseSearchScreen.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        primaryStage.setScene(scene);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseSearchScreen.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle the error appropriately
+        }
     }
 
     @Override

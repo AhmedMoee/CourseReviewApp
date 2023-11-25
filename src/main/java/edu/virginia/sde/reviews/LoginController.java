@@ -1,5 +1,6 @@
 package edu.virginia.sde.reviews;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -55,7 +56,13 @@ public class LoginController {
                 if (storedPassword.isPresent() && storedPassword.get().equals(password)) {
                     // Login successful - proceed to next scene
                     messageLabel.setText("Login successful.");
-                    application.switchToCourseSearch();         // This line causes the error
+                    Platform.runLater(() -> {
+                        try {
+                            application.switchToCourseSearch();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } else {
                     // Invalid password
                     messageLabel.setText("Invalid password.");
