@@ -43,7 +43,7 @@ public class CourseSearchController {
 
     private void loadCourses() {
         try {
-            List<Course> courses = dbDriver.getAllCourses();
+            List<Course> courses = dbDriver.getAllCoursesWithRatings();
             // You might want to calculate average ratings for these courses here
             coursesListView.getItems().setAll(courses);
         } catch (SQLException e) {
@@ -113,7 +113,7 @@ public class CourseSearchController {
         }
 
         int number = Integer.parseInt(numberStr);
-        Course newCourse = new Course(0, subject, number, title);
+        Course newCourse = new Course(0, subject, number, title, null);
 
         try {
             dbDriver.addCourse(newCourse);
@@ -136,7 +136,6 @@ public class CourseSearchController {
 
     @FXML
     protected void handleLogOut(ActionEvent event) {
-        // Implement logout logic
 
         try {
             if (dbDriver != null) {

@@ -22,6 +22,7 @@ public class LoginController {
     private Label messageLabel;
 
     private final DatabaseDriver dbDriver;
+    private CourseReviewApplication application;
 
     public LoginController() {
         Configuration configuration = new Configuration();
@@ -32,6 +33,10 @@ public class LoginController {
         } catch (SQLException e) {
             messageLabel.setText("Unable to connect to database.");
         }
+    }
+
+    public void setApplication(CourseReviewApplication application) {
+        this.application = application;
     }
 
     @FXML
@@ -50,15 +55,16 @@ public class LoginController {
                 if (storedPassword.isPresent() && storedPassword.get().equals(password)) {
                     // Login successful - proceed to next scene
                     messageLabel.setText("Login successful.");
+                    application.switchToCourseSearch();         // This line causes the error
                 } else {
                     // Invalid password
-                    messageLabel.setText("Invalid username or password.");
+                    messageLabel.setText("Invalid password.");
                 }
             } else {
                 // User does not exist
-                messageLabel.setText("Invalid username or password.");
+                messageLabel.setText("User does not exist. Please create an account.");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             messageLabel.setText("Error while logging in.");
         }
     }
@@ -69,7 +75,7 @@ public class LoginController {
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Username and password cannot be empty.");
+            messageLabel.setText("Username or password cannot be empty.");
             return;
         }
 

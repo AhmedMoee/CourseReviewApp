@@ -10,12 +10,12 @@ public class Course {
     private Double averageRating;      // Average rating of the course
 
     // Constructor
-    public Course(int id, String subject, int courseNumber, String title) {
+    public Course(int id, String subject, int courseNumber, String title, Double averageRating) {
         this.courseID = id;
         this.subject = subject;
         this.courseNumber = courseNumber;
         this.title = title;
-        this.averageRating = null; // Initially, there may be no reviews
+        this.averageRating = averageRating; // Initially, there may be no reviews
     }
 
     public Course() {

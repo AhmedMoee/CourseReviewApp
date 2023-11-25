@@ -153,20 +153,47 @@ public class DatabaseDriver {
         if (connection.isClosed()) throw new IllegalStateException("Connection is not open");
         List<Course> courses = new ArrayList<>();
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM Courses")) {
-            while (resultSet.next()) {
-                int id = resultSet.getInt("ID");
-                String subject = resultSet.getString("Subject");
-                int courseNumber = resultSet.getInt("CourseNumber");
-                String title = resultSet.getString("Title");
-                Course course = new Course(id, subject, courseNumber, title);
-                courses.add(course);
+             ResultSet results = statement.executeQuery("SELECT * FROM Courses")) {
+            while (results.next()) {
+                int id = results.getInt("ID");
+                String subject = results.getString("Subject");
+                int courseNumber = results.getInt("CourseNumber");
+                String title = results.getString("Title");
+                Course newCourse = new Course(id, subject, courseNumber, title, null);
+                courses.add(newCourse);
             }
         } catch (SQLException e) {
             throw e;
         }
         return courses;
     }
+
+    public List<Course> getAllCoursesWithRatings() throws SQLException {
+        List<Course> courses = new ArrayList<>();
+        String query = "SELECT c.*, AVG(r.Rating) as AverageRating " +
+                "FROM Courses c " +
+                "LEFT JOIN Reviews r ON c.ID = r.CourseID " +
+                "GROUP BY c.ID";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet results = statement.executeQuery();
+            while (results.next()) {
+                int id = results.getInt("ID");
+                String subject = results.getString("Subject");
+                int courseNumber = results.getInt("CourseNumber");
+                String title = results.getString("Title");
+                Double averageRating = results.getDouble("AverageRating");
+                if (results.wasNull()) {
+                    averageRating = null; // Set to null if no reviews
+                }
+                Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
+                courses.add(newCourse);
+            }
+        }
+        return courses;
+    }
+
+
 
     /**
      * Gets a course by its ID
@@ -177,14 +204,18 @@ public class DatabaseDriver {
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT * FROM Courses WHERE ID = ?")) {
             preparedStatement.setInt(1, courseID);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int id = resultSet.getInt("ID");
-                    String subject = resultSet.getString("Subject");
-                    int courseNumber = resultSet.getInt("CourseNumber");
-                    String title = resultSet.getString("Title");
-                    Course course = new Course(id, subject, courseNumber, title);
-                    return Optional.of(course);
+            try (ResultSet results = preparedStatement.executeQuery()) {
+                if (results.next()) {
+                    int id = results.getInt("ID");
+                    String subject = results.getString("Subject");
+                    int courseNumber = results.getInt("CourseNumber");
+                    String title = results.getString("Title");
+                    Double averageRating = results.getDouble("AverageRating");
+                    if (results.wasNull()) {
+                        averageRating = null; // Set to null if no reviews
+                    }
+                    Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
+                    return Optional.of(newCourse);
                 } else {
                     return Optional.empty();
                 }
@@ -238,7 +269,11 @@ public class DatabaseDriver {
                 String subject = results.getString("Subject");
                 int courseNumber = results.getInt("CourseNumber");
                 String title = results.getString("Title");
-                var newCourse = new Course(id, subject, courseNumber, title);
+                Double averageRating = results.getDouble("AverageRating");
+                if (results.wasNull()) {
+                    averageRating = null; // Set to null if no reviews
+                }
+                Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
                 courses.add(newCourse);
             }
             statement.close();
@@ -265,7 +300,11 @@ public class DatabaseDriver {
                 String subject = results.getString("Subject");
                 int number = results.getInt("CourseNumber");
                 String title = results.getString("Title");
-                var newCourse = new Course(id, subject, number, title);
+                Double averageRating = results.getDouble("AverageRating");
+                if (results.wasNull()) {
+                    averageRating = null; // Set to null if no reviews
+                }
+                Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
                 courses.add(newCourse);
             }
             statement.close();
@@ -294,7 +333,7 @@ public class DatabaseDriver {
                 String subject = results.getString("Subject");
                 int number = results.getInt("CourseNumber");
                 String title = results.getString("Title");
-                var newCourse = new Course(id, subject, number, title);
+                var newCourse = new Course(id, subject, number, title, null);
                 courses.add(newCourse);
             }
             statement.close();

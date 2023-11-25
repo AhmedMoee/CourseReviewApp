@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -11,4 +8,22 @@
             fx:controller="edu.virginia.sde.reviews.CourseSearchController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <VBox spacing="10" padding="10">
+        <HBox spacing="5">
+            <TextField fx:id="searchSubjectField" promptText="Subject"/>
+            <TextField fx:id="searchNumberField" promptText="Number"/>
+            <TextField fx:id="searchTitleField" promptText="Title"/>
+            <Button text="Search" onAction="#handleSearch"/>
+        </HBox>
+
+        <ListView fx:id="coursesListView" VBox.vgrow="ALWAYS"/>
+
+        <HBox spacing="5">
+            <Button fx:id="addButton" text="Add Course" onAction="#handleCourseAdd"/>
+            <Button fx:id="myReviewsButton" text="My Reviews" onAction="#handleMyReviews"/>
+            <Button fx:id="logOutButton" text="Log Out" onAction="#handleLogOut"/>
+        </HBox>
+
+        <Label fx:id="messageLabel"/>
+    </VBox>
 </AnchorPane>
