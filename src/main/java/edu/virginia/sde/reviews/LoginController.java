@@ -46,7 +46,7 @@ public class LoginController {
 
         try {
             if (dbDriver.userExists(username)) {
-                Optional<String> storedPassword = dbDriver.getPasswordForUser(new User(0, username, ""));
+                Optional<String> storedPassword = dbDriver.getPasswordForUser(new User(username, ""));
                 if (storedPassword.isPresent() && storedPassword.get().equals(password)) {
                     // Login successful - proceed to next scene
                     messageLabel.setText("Login successful.");
@@ -77,7 +77,7 @@ public class LoginController {
             if (dbDriver.userExists(username)) {
                 messageLabel.setText("User already exists. Please login.");
             } else {
-                dbDriver.addUser(new User(0, username, password));
+                dbDriver.addUser(new User(username, password));
                 dbDriver.commit();
                 messageLabel.setText("Registration successful. User created.");
             }

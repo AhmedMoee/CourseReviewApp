@@ -70,7 +70,7 @@ public class DatabaseDriver {
 
             String createUsersTable = "CREATE TABLE IF NOT EXISTS Users (" +
                     "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "Username VARCHAR(255) NOT NULL, " +
+                    "Username VARCHAR(255) NOT NULL UNIQUE, " +
                     "Password VARCHAR(255) NOT NULL)";
             statement.executeUpdate(createUsersTable);
 
@@ -311,12 +311,25 @@ public class DatabaseDriver {
     public void addUser(User user) throws SQLException{
         try {
             if (connection.isClosed()) throw new IllegalStateException("Connection is not open");
-            String command = "INSERT INTO Users(ID,Username,Password) VALUES(null,?,?)";
+            String command = "INSERT INTO Users(Username, Password) VALUES(?, ?)";
             PreparedStatement statement = connection.prepareStatement(command);
+
+            // Set parameters
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
+
+            // Execute the update
             statement.executeUpdate();
             statement.close();
+
+            // Get the last inserted ID
+            Statement lastIdStatement = connection.createStatement();
+            ResultSet rs = lastIdStatement.executeQuery("SELECT last_insert_rowid()");
+            if (rs.next()) {
+                int generatedId = rs.getInt(1); // Retrieve the generated ID
+                user.setUserID(generatedId); // Update the User object with the new ID
+            }
+            lastIdStatement.close();
         } catch (SQLException e) {
             rollback();
             throw e;
@@ -352,7 +365,7 @@ public class DatabaseDriver {
                 int id = resultSet.getInt("ID");
                 String username = resultSet.getString("Username");
                 String password = resultSet.getString("Password");
-                User user = new User(id, username, password);
+                User user = new User(username, password);
                 users.add(user);
             }
         }
@@ -426,7 +439,7 @@ public class DatabaseDriver {
                     int id = resultSet.getInt("ID");
                     String username = resultSet.getString("Username");
                     String password = resultSet.getString("Password");
-                    User user = new User(id, username, password);
+                    User user = new User(username, password);
                     return Optional.of(user);
                 } else {
                     return Optional.empty();
@@ -451,7 +464,7 @@ public class DatabaseDriver {
                 int id = results.getInt("ID");
                 String username2 = results.getString("Username");
                 String password = results.getString("Password");
-                return Optional.of(new User(id, username2, password));
+                return Optional.of(new User(username2, password));
             }
             statement.close();
         }catch (SQLException e) {
