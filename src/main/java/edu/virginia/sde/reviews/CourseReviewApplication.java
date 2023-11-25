@@ -19,26 +19,52 @@ public class CourseReviewApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        this.databaseDriver = DatabaseDriver.getInstance(new Configuration().getDatabaseFilename());
+        databaseDriver.connect();
+
         this.primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         LoginController loginController = fxmlLoader.getController();
         loginController.setApplication(this);
 
-        stage.setTitle("Course Review Application");
+        stage.setTitle("Course Review Application - Login");
         stage.setScene(scene);
         stage.show();
     }
 
-    public void switchToCourseSearch() throws Exception {
+    public void switchToCourseSearch() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseSearchScreen.fxml"));
             Parent root = loader.load();
+
+            CourseSearchController controller = loader.getController();
+            controller.setApplication(this);
+            controller = loader.getController();
+            controller.setDatabaseDriver(databaseDriver);
+
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
+            primaryStage.setTitle("Course Review Application - Course Search");
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle the error appropriately
+        }
+    }
+
+    public void switchToLoginScreen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+            Parent root = loader.load();
+
+            LoginController loginController = loader.getController();
+            loginController.setDatabaseDriver(databaseDriver);
+            loginController.setApplication(this);
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Course Review Application - Login");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.*;
 
 public class DatabaseDriver {
 
+    private static DatabaseDriver instance;
     private final String sqliteFilename;
     private Connection connection;
 
@@ -12,12 +13,19 @@ public class DatabaseDriver {
         this.sqliteFilename = sqlListDatabaseFilename;
     }
 
+    public static DatabaseDriver getInstance(String sqliteFilename) {
+        if (instance == null) {
+            instance = new DatabaseDriver(sqliteFilename);
+        }
+        return instance;
+    }
+
     /**
      * Opens a connection to the database
      */
     public void connect() throws SQLException {
         if (connection != null && !connection.isClosed()) {
-            throw new IllegalStateException("The connection is already opened");
+            connection.close();
         }
         connection = DriverManager.getConnection("jdbc:sqlite:" + sqliteFilename);
         //the next line enables foreign key enforcement - do not delete/comment out

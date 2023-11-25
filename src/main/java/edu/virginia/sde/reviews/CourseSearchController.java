@@ -27,12 +27,21 @@ public class CourseSearchController {
     private Label messageLabel;
 
     private DatabaseDriver dbDriver;
+    private CourseReviewApplication application;
+
+    public void setApplication(CourseReviewApplication application) {
+        this.application = application;
+    }
+
+    public void setDatabaseDriver(DatabaseDriver dbDriver) {
+        this.dbDriver = dbDriver;
+    }
 
     // Initialize method
     @FXML
     public void initialize() {
         Configuration configuration = new Configuration();
-        dbDriver = new DatabaseDriver(configuration.getDatabaseFilename());
+        dbDriver = DatabaseDriver.getInstance(configuration.getDatabaseFilename());
         try {
             dbDriver.connect();
             loadCourses();
@@ -112,15 +121,23 @@ public class CourseSearchController {
             return;
         }
 
-        int number = Integer.parseInt(numberStr);
-        Course newCourse = new Course(0, subject, number, title, null);
-
         try {
-            dbDriver.addCourse(newCourse);
-            dbDriver.commit();
-            loadCourses(); // Reload the courses list
+            int number = Integer.parseInt(numberStr);
+            Course newCourse = new Course(0, subject, number, title, null);
+
+            if (!dbDriver.courseAlreadyExists(subject, number, title)) {
+                dbDriver.addCourse(newCourse);
+                dbDriver.commit();
+                loadCourses(); // Reload the courses list
+                messageLabel.setText("Course added successfully.");
+            } else {
+                messageLabel.setText("Course already exists.");
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
             messageLabel.setText("Unable to add course.");
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Invalid course number.");
         }
     }
 
@@ -137,15 +154,10 @@ public class CourseSearchController {
     @FXML
     protected void handleLogOut(ActionEvent event) {
 
-        try {
-            if (dbDriver != null) {
-                dbDriver.disconnect();
-            }
-            // Navigate to login screen or close application
-
-        } catch (SQLException e) {
-            // Handle disconnection error
-            messageLabel.setText("Unable to disconnect from database.");
+        if (this.application != null) {
+            application.switchToLoginScreen();
+        } else {
+            messageLabel.setText("Error while logging out.");
         }
     }
 

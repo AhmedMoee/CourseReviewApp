@@ -22,12 +22,12 @@ public class LoginController {
     @FXML
     private Label messageLabel;
 
-    private final DatabaseDriver dbDriver;
+    private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
 
     public LoginController() {
         Configuration configuration = new Configuration();
-        this.dbDriver = new DatabaseDriver(configuration.getDatabaseFilename());
+        this.dbDriver = DatabaseDriver.getInstance(configuration.getDatabaseFilename());
         try {
             this.dbDriver.connect();
             this.dbDriver.createTables();
@@ -40,13 +40,18 @@ public class LoginController {
         this.application = application;
     }
 
+    public void setDatabaseDriver(DatabaseDriver dbDriver) {
+        this.dbDriver = dbDriver;
+        // Now use this dbDriver for database operations
+    }
+
     @FXML
     public void handleLogin(javafx.event.ActionEvent actionEvent) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            messageLabel.setText("Username and password cannot be empty.");
+            messageLabel.setText("Username or password cannot be empty.");
             return;
         }
 
@@ -60,6 +65,7 @@ public class LoginController {
                         try {
                             application.switchToCourseSearch();
                         } catch (Exception e) {
+                            messageLabel.setText("Error while switching to course search screen.");
                             e.printStackTrace();
                         }
                     });
