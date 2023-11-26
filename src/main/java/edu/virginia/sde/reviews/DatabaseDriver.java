@@ -178,10 +178,10 @@ public class DatabaseDriver {
 
     public List<Course> getAllCoursesWithRatings() throws SQLException {
         List<Course> courses = new ArrayList<>();
-        String query = "SELECT c.*, AVG(r.Rating) as AverageRating " +
+        String query = "SELECT c.ID, c.Subject, c.CourseNumber, c.Title, AVG(r.Rating) as AverageRating " +
                 "FROM Courses c " +
                 "LEFT JOIN Reviews r ON c.ID = r.CourseID " +
-                "GROUP BY c.ID";
+                "GROUP BY c.ID, c.Subject, c.CourseNumber, c.Title";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet results = statement.executeQuery();
@@ -266,27 +266,30 @@ public class DatabaseDriver {
      * @return All courses with the given subject
      */
     public List<Course> getCoursesBySubject(String courseSubject) throws SQLException{
+        courseSubject = courseSubject.toUpperCase();
         if (connection.isClosed()) throw new IllegalStateException("Connection is not open");
         var courses = new ArrayList<Course>();
-        try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * from Courses where Subject=?");
+        String query = "SELECT Courses.*, AVG(Reviews.Rating) AS AverageRating " +
+                "FROM Courses LEFT JOIN Reviews ON Courses.ID = Reviews.CourseID " +
+                "WHERE Courses.Subject = ? " +
+                "GROUP BY Courses.ID";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, courseSubject);
-            ResultSet results = statement.executeQuery();
-            while (results.next()) {
-                int id = results.getInt("ID");
-                String subject = results.getString("Subject");
-                int courseNumber = results.getInt("CourseNumber");
-                String title = results.getString("Title");
-                Double averageRating = results.getDouble("AverageRating");
-                if (results.wasNull()) {
-                    averageRating = null; // Set to null if no reviews
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    int id = results.getInt("ID");
+                    String subject = results.getString("Subject");
+                    int number = results.getInt("CourseNumber");
+                    String title = results.getString("Title");
+                    Double averageRating = results.getDouble("AverageRating");
+                    if (results.wasNull()) {
+                        averageRating = null; // or a default value
+                    }
+                    Course newCourse = new Course(id, subject, number, title, averageRating);
+                    courses.add(newCourse);
                 }
-                Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
-                courses.add(newCourse);
             }
-            statement.close();
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return courses;
     }
@@ -299,8 +302,12 @@ public class DatabaseDriver {
     public List<Course> getCoursesByNumber(int courseNumber) throws SQLException{
         if (connection.isClosed()) throw new IllegalStateException("Connection is not open");
         var courses = new ArrayList<Course>();
-        try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * from Courses where CourseNumber=?");
+        String query = "SELECT c.*, AVG(r.Rating) AS AverageRating " +
+                "FROM Courses c " +
+                "LEFT JOIN Reviews r ON c.ID = r.CourseID " +
+                "WHERE c.CourseNumber = ? " +
+                "GROUP BY c.ID, c.Subject, c.CourseNumber, c.Title";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, courseNumber);
             ResultSet results = statement.executeQuery();
             while (results.next()) {
@@ -312,12 +319,9 @@ public class DatabaseDriver {
                 if (results.wasNull()) {
                     averageRating = null; // Set to null if no reviews
                 }
-                Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
+                Course newCourse = new Course(id, subject, number, title, averageRating);
                 courses.add(newCourse);
             }
-            statement.close();
-        }catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return courses;
     }

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CourseSearchController {
 
@@ -67,37 +68,54 @@ public class CourseSearchController {
             String numberStr = searchNumberField.getText().trim();
             String title = searchTitleField.getText().trim();
 
-            List<Course> filteredCourses = new ArrayList<>();
-
-            if (!subject.isEmpty()) {
-                // Fetch courses by subject
-                filteredCourses.addAll(dbDriver.getCoursesBySubject(subject));
-            }
-            if (!numberStr.isEmpty()) {
-                // Fetch courses by number
-                int number = Integer.parseInt(numberStr);
-                filteredCourses.addAll(dbDriver.getCoursesByNumber(number));
-            }
-            if (!title.isEmpty()) {
-                // Fetch courses by title
-                filteredCourses.addAll(dbDriver.getCoursesByTitle(title));
-            }
-
             if (subject.isEmpty() && numberStr.isEmpty() && title.isEmpty()) {
                 // No search criteria
                 messageLabel.setText("Please enter at least one search criteria.");
+                // Show all courses
+                coursesListView.getItems().setAll(dbDriver.getAllCoursesWithRatings());
                 return;
             }
+
+            var filteredCourses = dbDriver.getAllCoursesWithRatings();
+
+            if (!subject.isEmpty()) {
+                // Fetch courses by subject
+                filteredCourses = filteredCourses.stream()
+                        .filter(course -> course.getSubject().equalsIgnoreCase(subject))
+                        .sorted(Comparator.comparingInt(Course::getCourseNumber))
+                        .collect(Collectors.toList());
+            }
+
+            if (!title.isEmpty()) {
+                // Fetch courses by title
+                filteredCourses = filteredCourses.stream()
+                        .filter(course -> course.getTitle().toUpperCase().contains(title.toUpperCase()))
+                        .sorted(Comparator.comparingInt(Course::getCourseNumber))
+                        .collect(Collectors.toList());
+            }
+
+            if (!numberStr.isEmpty()) {
+                // Fetch courses by number
+                int number = Integer.parseInt(numberStr);
+                filteredCourses = filteredCourses.stream()
+                        .filter(course -> course.getCourseNumber() == number)
+                        .sorted(Comparator.comparing(Course::getSubject).thenComparingInt(Course::getCourseNumber))
+                        .collect(Collectors.toList());
+            }
+
+            filteredCourses.sort(Comparator.comparingInt(Course::getCourseNumber));
 
             if (filteredCourses.isEmpty()) {
                 // No courses found
                 messageLabel.setText("No courses found.");
                 return;
+            }else {
+                coursesListView.getItems().setAll(filteredCourses);
             }
 
             // Remove duplicates if any criteria overlap
-            Set<Course> uniqueCourses = new HashSet<>(filteredCourses);
-            coursesListView.getItems().setAll(uniqueCourses);
+            coursesListView.getItems().setAll(filteredCourses.stream().distinct().collect(Collectors.toList()));
+            messageLabel.setText("");
         } catch (SQLException e) {
             // Handle SQL Exception
             messageLabel.setText("Unable to search courses.");
@@ -115,9 +133,21 @@ public class CourseSearchController {
         String title = searchTitleField.getText().trim();
 
         // Validate inputs
-        if (!subject.matches("[A-Z]{2,4}") || numberStr.length() != 4 || title.isEmpty() || title.length() > 50) {
+        if (!subject.matches("[A-Z]{2,4}")) {
             // Show validation error message
             messageLabel.setText("Invalid input.");
+            return;
+        } else if (numberStr.length() != 4) {
+            messageLabel.setText("Invalid course number.");
+            return;
+        } else if (title.isEmpty()) {
+            messageLabel.setText("Title cannot be empty.");
+            return;
+        } else if (subject.isEmpty()) {
+            messageLabel.setText("Subject cannot be empty.");
+            return;
+        } else if (title.length() > 50) {
+            messageLabel.setText("Title cannot be longer than 50 characters.");
             return;
         }
 
