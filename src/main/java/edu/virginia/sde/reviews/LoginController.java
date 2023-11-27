@@ -24,6 +24,7 @@ public class LoginController {
 
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
+    private CourseSearchController courseSearchController;
 
     public LoginController() {
         Configuration configuration = new Configuration();
@@ -42,7 +43,10 @@ public class LoginController {
 
     public void setDatabaseDriver(DatabaseDriver dbDriver) {
         this.dbDriver = dbDriver;
-        // Now use this dbDriver for database operations
+    }
+
+    public void setCourseSearchController(CourseSearchController controller) {
+        this.courseSearchController = controller;
     }
 
     @FXML
@@ -61,9 +65,10 @@ public class LoginController {
                 if (storedPassword.isPresent() && storedPassword.get().equals(password)) {
                     // Login successful - proceed to next scene
                     messageLabel.setText("Login successful.");
+                    User currentUser = dbDriver.getUserByUsername(username).orElseThrow(() -> new SQLException("User not found"));
                     Platform.runLater(() -> {
                         try {
-                            application.switchToCourseSearch();
+                            application.switchToCourseSearch(currentUser);
                         } catch (Exception e) {
                             messageLabel.setText("Error while switching to course search screen.");
                             e.printStackTrace();

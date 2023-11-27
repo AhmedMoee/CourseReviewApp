@@ -26,8 +26,10 @@ public class CourseReviewController {
         this.application = application;
     }
 
-    public void setDatabaseDriver(DatabaseDriver dbDriver) {
-        this.dbDriver = dbDriver;
+    public void setDatabaseDriver() {
+        Configuration configuration = new Configuration();
+        this.dbDriver = DatabaseDriver.getInstance(configuration.getDatabaseFilename());
+        System.out.println("Database Driver set in CourseReviewController: " + this.dbDriver);
     }
 
     public void setCurrentCourseAndUser(Course course, User user) {
@@ -101,6 +103,6 @@ public class CourseReviewController {
 
     @FXML
     protected void handleBack() {
-        application.switchToCourseSearch();
+        application.switchToCourseSearch(currentUser);
     }
 }

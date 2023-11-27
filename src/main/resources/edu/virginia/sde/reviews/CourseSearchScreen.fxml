@@ -23,6 +23,7 @@
         <ListView fx:id="coursesListView" VBox.vgrow="ALWAYS"/>
 
         <HBox spacing="5">
+            <Button fx:id="selectCourseButton" text="Select Course" onAction="#handleCourseSelect"/>
             <Button fx:id="addButton" text="Add Course" onAction="#handleCourseAdd"/>
             <Button fx:id="myReviewsButton" text="My Reviews" onAction="#handleMyReviews"/>
             <Button fx:id="logOutButton" text="Log Out" onAction="#handleLogOut"/>

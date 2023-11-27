@@ -30,12 +30,18 @@ public class CourseSearchController {
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
 
+    private User currentUser;
+
     public void setApplication(CourseReviewApplication application) {
         this.application = application;
     }
 
     public void setDatabaseDriver(DatabaseDriver dbDriver) {
         this.dbDriver = dbDriver;
+    }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 
     // Initialize method
@@ -175,8 +181,9 @@ public class CourseSearchController {
     protected void handleCourseSelect() {
         Course selectedCourse = coursesListView.getSelectionModel().getSelectedItem();
         if (selectedCourse != null) {
-            // Transition to course review screen with selectedCourse
-            // You'll need to pass the selectedCourse to the next controller
+            application.switchToCourseReviewScreen(selectedCourse, currentUser);
+        } else {
+            messageLabel.setText("Please select a course first.");
         }
     }
 

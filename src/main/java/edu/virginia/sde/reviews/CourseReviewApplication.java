@@ -12,6 +12,7 @@ import java.sql.SQLException;
 public class CourseReviewApplication extends Application {
     private DatabaseDriver databaseDriver;
     private Stage primaryStage;
+    private CourseSearchController courseSearchController;
 
     public static void main(String[] args) {
         launch(args);
@@ -33,7 +34,7 @@ public class CourseReviewApplication extends Application {
         stage.show();
     }
 
-    public void switchToCourseSearch() {
+    public void switchToCourseSearch(User currentUser) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseSearchScreen.fxml"));
             Parent root = loader.load();
@@ -63,6 +64,24 @@ public class CourseReviewApplication extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void switchToCourseReviewScreen(Course selectedCourse, User currentUser) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseReviewScreen.fxml"));
+            Parent root = loader.load();
+
+            CourseReviewController controller = loader.getController();
+            controller.setDatabaseDriver(); // Set the database driver
+            controller.setApplication(this);
+            controller.setCurrentCourseAndUser(selectedCourse, currentUser);
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Course Review Application - Course Review");
         } catch (IOException e) {
             e.printStackTrace();
         }
