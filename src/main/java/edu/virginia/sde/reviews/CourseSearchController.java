@@ -135,7 +135,7 @@ public class CourseSearchController {
         // Validate inputs
         if (!subject.matches("[A-Z]{2,4}")) {
             // Show validation error message
-            messageLabel.setText("Invalid input.");
+            messageLabel.setText("Invalid subject input.");
             return;
         } else if (numberStr.length() != 4) {
             messageLabel.setText("Invalid course number.");

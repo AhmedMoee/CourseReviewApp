@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.virginia.sde.reviews.CourseReviewController"
+            prefHeight="600.0" prefWidth="800.0">
+    <VBox spacing="10">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10" />
+        </padding>
+        <Label fx:id="averageRatingLabel" /> <!-- Average Rating -->
+
+        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS" />
+
+        <HBox spacing="5">
+            <Label text="Rating:" />
+            <TextField fx:id="ratingField" prefWidth="50" />
+            <Label text="Comment:" />
+            <TextField fx:id="commentField" prefWidth="200" />
+            <Button text="Submit Review" onAction="#handleSubmitReview" />
+            <Button text="Delete Review" onAction="#handleDeleteReview" />
+        </HBox>
+
+        <Button text="Back" onAction="#handleBack" />
+    </VBox>
+
+</AnchorPane>
