@@ -85,14 +85,9 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review{" +
-                "id=" + id +
-                ", userId=" + userID +
-                ", courseId=" + courseID +
-                ", rating=" + rating +
-                ", entryTime=" + entryTime +
-                ", comment='" + comment + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
+        return "Rating: " + rating + "/5" + "\n" +
+                "Date posted: " + entryTime + "\n" +
+                comment + "\n" +
+                "Last Updated: " + timestamp;
     }
 }

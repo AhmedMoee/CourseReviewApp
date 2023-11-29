@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 public class CourseReviewController {
 
@@ -61,32 +62,54 @@ public class CourseReviewController {
 
     @FXML
     protected void handleSubmitReview() {
+        if (currentUser == null) {
+            messageLabel.setText("Error: User not set.");
+            return;
+        }
+
         try {
             int rating = parseRating();
+//            if (rating == -1) {
+//                messageLabel.setText("Invalid rating. Please enter a number between 1 and 5.");
+//                return;
+//            }
             String comment = commentField.getText();
-            Review review = new Review(0, currentCourse.getCourseID(), currentUser.getUserID(),
+
+            Optional<Review> existingReview = dbDriver.getReviewFromUserForCourse(currentUser, currentCourse);
+            Review review = new Review(0, currentUser.getUserID(), currentCourse.getCourseID(),
                     rating, new Timestamp(System.currentTimeMillis()), comment);
 
-            if (dbDriver.getReviewFromUserForCourse(currentUser, currentCourse).isPresent()) {
-                dbDriver.editReview(null, review); // Should this be oldReview, review?
+            if (existingReview.isPresent()) {
+                dbDriver.editReview(existingReview.get(), review);
             } else {
+                System.out.println("Add Review:" + currentCourse.getCourseID());
+                System.out.println(currentUser.getUserID());
                 dbDriver.addReview(review);
             }
 
             dbDriver.commit();
             loadReviews(); // Reload reviews
             messageLabel.setText("Review submitted successfully.");
-        } catch (SQLException | IllegalArgumentException e) {
-            messageLabel.setText(e.getMessage());
+        } catch (NumberFormatException ne) {
+            messageLabel.setText("Invalid rating. Please enter a number between 1 and 5.");
+        } catch (IllegalArgumentException e) {
+            messageLabel.setText("Illegal Argument Exception");
+        } catch (SQLException e) {
+            messageLabel.setText("Error submitting review: " + e.getMessage());
         }
     }
 
-    private int parseRating() throws IllegalArgumentException {
-        int rating = Integer.parseInt(ratingField.getText());
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5.");
+    private int parseRating() {
+        try {
+            int rating = Integer.parseInt(ratingField.getText());
+            if (rating < 1 || rating > 5) {
+                messageLabel.setText("Rating must be between 1 and 5.");
+            }
+            return rating;
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Invalid rating format.");
         }
-        return rating;
+        return -1;
     }
 
     @FXML

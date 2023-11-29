@@ -13,6 +13,7 @@ public class CourseReviewApplication extends Application {
     private DatabaseDriver databaseDriver;
     private Stage primaryStage;
     private CourseSearchController courseSearchController;
+    private User currentUser;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,6 +23,7 @@ public class CourseReviewApplication extends Application {
     public void start(Stage stage) throws Exception {
         this.databaseDriver = DatabaseDriver.getInstance(new Configuration().getDatabaseFilename());
         databaseDriver.connect();
+        this.databaseDriver.createTables();
 
         this.primaryStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
@@ -43,6 +45,7 @@ public class CourseReviewApplication extends Application {
             controller.setApplication(this);
             controller = loader.getController();
             controller.setDatabaseDriver(databaseDriver);
+            controller.setCurrentUser(currentUser);
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -75,7 +78,7 @@ public class CourseReviewApplication extends Application {
             Parent root = loader.load();
 
             CourseReviewController controller = loader.getController();
-            controller.setDatabaseDriver(); // Set the database driver
+            controller.setDatabaseDriver();
             controller.setApplication(this);
             controller.setCurrentCourseAndUser(selectedCourse, currentUser);
 

@@ -88,10 +88,9 @@ public class DatabaseDriver {
                     "CourseID INTEGER NOT NULL, " +
                     "Rating INTEGER NOT NULL, " +
                     "EntryTime TIMESTAMP NOT NULL, " +
-                    "Comment VARCHAR(255), " +
+                    "Comment VARCHAR(255) NOT NULL, " +
                     "FOREIGN KEY (UserID) REFERENCES Users(ID) ON DELETE CASCADE, " +
-                    "FOREIGN KEY (CourseID) REFERENCES Courses(ID) ON DELETE CASCADE, " +
-                    "UNIQUE (UserID, CourseID))";
+                    "FOREIGN KEY (CourseID) REFERENCES Courses(ID) ON DELETE CASCADE)";
             statement.executeUpdate(createReviewsTable);
         }
     }
@@ -515,7 +514,9 @@ public class DatabaseDriver {
                 int id = results.getInt("ID");
                 String username2 = results.getString("Username");
                 String password = results.getString("Password");
-                return Optional.of(new User(username2, password));
+                User user = new User(username2, password);
+                user.setUserID(id);
+                return Optional.of(user);
             }
             statement.close();
         }catch (SQLException e) {
@@ -569,6 +570,9 @@ public class DatabaseDriver {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
+            System.err.println("Error in addReview: " + e.getMessage());
+            System.err.println("Review details: UserID=" + review.getUserID() + ", CourseID=" + review.getCourseID());
+            e.printStackTrace();
             rollback();
             throw e;
         }

@@ -63,6 +63,7 @@ public class CourseSearchController {
             // You might want to calculate average ratings for these courses here
             coursesListView.getItems().setAll(courses);
         } catch (SQLException e) {
+            e.printStackTrace();
             messageLabel.setText("Unable to load courses.");
         }
     }

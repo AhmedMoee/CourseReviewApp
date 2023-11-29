@@ -24,6 +24,7 @@ public class LoginController {
 
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
+    private User currentUser;
     private CourseSearchController courseSearchController;
 
     public LoginController() {
@@ -44,6 +45,11 @@ public class LoginController {
     public void setDatabaseDriver(DatabaseDriver dbDriver) {
         this.dbDriver = dbDriver;
     }
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
 
     public void setCourseSearchController(CourseSearchController controller) {
         this.courseSearchController = controller;
