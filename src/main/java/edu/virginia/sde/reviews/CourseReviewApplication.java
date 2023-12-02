@@ -22,7 +22,7 @@ public class CourseReviewApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.databaseDriver = DatabaseDriver.getInstance(new Configuration().getDatabaseFilename());
-        databaseDriver.connect();
+        this.databaseDriver.connect();
         this.databaseDriver.createTables();
 
         this.primaryStage = stage;
@@ -72,7 +72,7 @@ public class CourseReviewApplication extends Application {
         }
     }
 
-    public void switchToCourseReviewScreen(Course selectedCourse, User currentUser) {
+    public void switchToCourseReviewScreen(Course selectedCourse, User currentUser, String previousScene) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseReviewScreen.fxml"));
             Parent root = loader.load();
@@ -80,7 +80,7 @@ public class CourseReviewApplication extends Application {
             CourseReviewController controller = loader.getController();
             controller.setDatabaseDriver();
             controller.setApplication(this);
-            controller.setCurrentCourseAndUser(selectedCourse, currentUser);
+            controller.setCurrentCourseAndUser(selectedCourse, currentUser, previousScene);
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

@@ -21,6 +21,7 @@ public class CourseReviewController {
     private User currentUser;
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
+    private String previousScene;
 
     // Setters for application and database driver
     public void setApplication(CourseReviewApplication application) {
@@ -33,9 +34,10 @@ public class CourseReviewController {
         System.out.println("Database Driver set in CourseReviewController: " + this.dbDriver);
     }
 
-    public void setCurrentCourseAndUser(Course course, User user) {
+    public void setCurrentCourseAndUser(Course course, User user, String previousScene) {
         this.currentCourse = course;
         this.currentUser = user;
+        this.previousScene = previousScene;
         loadReviews();
     }
 
@@ -167,6 +169,10 @@ public class CourseReviewController {
 
     @FXML
     protected void handleBack() {
-        application.switchToCourseSearch(currentUser);
+        if ("MyReviews".equals(previousScene)) {
+            application.switchToMyReviewsScreen(currentUser);
+        } else {
+            application.switchToCourseSearch(currentUser);
+        }
     }
 }

@@ -182,7 +182,7 @@ public class CourseSearchController {
     protected void handleCourseSelect() {
         Course selectedCourse = coursesListView.getSelectionModel().getSelectedItem();
         if (selectedCourse != null) {
-            application.switchToCourseReviewScreen(selectedCourse, currentUser);
+            application.switchToCourseReviewScreen(selectedCourse, currentUser, "CourseSearchScreen");
         } else {
             messageLabel.setText("Please select a course first.");
         }

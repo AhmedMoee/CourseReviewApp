@@ -9,7 +9,12 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="edu.virginia.sde.reviews.LoginController"
             prefHeight="400.0" prefWidth="600.0">
-    <GridPane layoutX="150.0" layoutY="100.0" hgap="10" vgap="10" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+    <GridPane layoutX="150.0" layoutY="100.0"
+              hgap="10" vgap="10"
+              AnchorPane.bottomAnchor="50.0"
+              AnchorPane.leftAnchor="50.0"
+              AnchorPane.rightAnchor="50.0"
+              AnchorPane.topAnchor="50.0">
         <padding>
             <Insets top="20" right="20" bottom="20" left="20"/>
         </padding>
@@ -38,6 +43,10 @@
             <font>
                <Font name="AppleGothic Regular" size="13.0" />
             </font></Button>
+            <Button onAction="#handleClose" text="Close Application">
+                <font>
+                    <Font name="AppleGothic Regular" size="13.0" />
+                </font></Button>
         </HBox>
       <columnConstraints>
          <ColumnConstraints />

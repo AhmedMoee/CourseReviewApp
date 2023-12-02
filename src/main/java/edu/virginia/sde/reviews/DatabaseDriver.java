@@ -208,8 +208,9 @@ public class DatabaseDriver {
      * @return The course with the given ID, or an empty Optional if no course exists with that ID
      */
     public Optional<Course> getCourseById(int courseID) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT * FROM Courses WHERE ID = ?")) {
+        if (connection.isClosed()) throw new IllegalStateException("Connection is not open");
+        String query = "SELECT * FROM Courses WHERE ID = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, courseID);
             try (ResultSet results = preparedStatement.executeQuery()) {
                 if (results.next()) {
@@ -217,11 +218,7 @@ public class DatabaseDriver {
                     String subject = results.getString("Subject");
                     int courseNumber = results.getInt("CourseNumber");
                     String title = results.getString("Title");
-                    Double averageRating = results.getDouble("AverageRating");
-                    if (results.wasNull()) {
-                        averageRating = null; // Set to null if no reviews
-                    }
-                    Course newCourse = new Course(id, subject, courseNumber, title, averageRating);
+                    Course newCourse = new Course(id, subject, courseNumber, title, null);
                     return Optional.of(newCourse);
                 } else {
                     return Optional.empty();

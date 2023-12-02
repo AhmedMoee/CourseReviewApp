@@ -17,7 +17,10 @@
                 <Insets bottom="10.0"/>
             </VBox.margin>
         </ListView>
-        <Label fx:id="messageLabel" textFill="red" />
-        <Button text="Back" onAction="#handleBack"/>
+        <Label fx:id="messageLabel" textFill="red"/>
+        <HBox spacing="5.0">
+            <Button fx:id="selectReviewButton" text="Select Review" onAction="#handleReviewSelect"/>
+            <Button text="Back" onAction="#handleBack"/>
+        </HBox>
     </VBox>
 </AnchorPane>
