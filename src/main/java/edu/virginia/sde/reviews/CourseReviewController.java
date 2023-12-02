@@ -68,11 +68,8 @@ public class CourseReviewController {
         }
 
         try {
-            int rating = parseRating();
-            if (rating < 1 || rating > 5) {
-                messageLabel.setText("Invalid rating.");
-                return;
-            }
+            Integer rating = parseRating();
+            if (rating == null) return;
             String comment = commentField.getText();
 
             Optional<Review> existingReview = dbDriver.getReviewFromUserForCourse(currentUser, currentCourse);
@@ -89,14 +86,30 @@ public class CourseReviewController {
 
             dbDriver.commit();
             loadReviews(); // Reload reviews
-        } catch (NumberFormatException ne) {
-            messageLabel.setText("Invalid rating. Please enter a number between 1 and 5.");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Current Course ID: " + currentCourse.getCourseID());
-            System.out.println("Current User ID: " + currentUser.getUserID());
             messageLabel.setText("Error submitting review: " + e.getMessage());
         }
+    }
+
+    private Integer parseRating() {
+        if (ratingField.getText().trim().isEmpty()) {
+            messageLabel.setText("Please enter a rating.");
+            return null;
+        }
+
+        int rating;
+        try {
+            rating = Integer.parseInt(ratingField.getText());
+            if (rating < 1 || rating > 5) {
+                messageLabel.setText("Rating must be between 1 and 5.");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            messageLabel.setText("Invalid rating format.");
+            return null;
+        }
+        return rating;
     }
 
     @FXML
@@ -121,24 +134,6 @@ public class CourseReviewController {
         // Load existing review details into the form
         ratingField.setText(String.valueOf(selectedReview.getRating()));
         commentField.setText(selectedReview.getComment());
-    }
-
-    private int parseRating() {
-        if (ratingField.getText().isEmpty()) {
-            messageLabel.setText("Rating cannot be empty.");
-            return -1;
-        }
-
-        try {
-            int rating = Integer.parseInt(ratingField.getText());
-            if (rating < 1 || rating > 5) {
-                messageLabel.setText("Rating must be between 1 and 5.");
-            }
-            return rating;
-        } catch (NumberFormatException e) {
-            messageLabel.setText("Invalid rating format.");
-        }
-        return -1;
     }
 
     @FXML
