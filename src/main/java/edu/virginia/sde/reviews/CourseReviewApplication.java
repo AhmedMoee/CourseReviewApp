@@ -90,6 +90,24 @@ public class CourseReviewApplication extends Application {
         }
     }
 
+    public void switchToMyReviewsScreen(User currentUser) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MyReviewsScreen.fxml"));
+            Parent root = loader.load();
+
+            MyReviewsController controller = loader.getController();
+            controller.setDatabaseDriver(databaseDriver);
+            controller.setApplication(this);
+            controller.setCurrentUser(currentUser);
+
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Course Review Application - My Reviews");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void stop() {
         // Close the database connection when the application is stopped

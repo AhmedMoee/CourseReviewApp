@@ -202,5 +202,10 @@ public class CourseSearchController {
     @FXML
     protected void handleMyReviews(ActionEvent event) {
         // Implement navigation to My Reviews screen
+        if (this.application != null) {
+            application.switchToMyReviewsScreen(currentUser);
+        } else {
+            messageLabel.setText("Error while navigating to My Reviews screen.");
+        }
     }
 }

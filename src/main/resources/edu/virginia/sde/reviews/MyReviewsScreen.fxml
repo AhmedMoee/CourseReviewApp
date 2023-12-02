@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="edu.virginia.sde.reviews.MyReviewsController"
+            prefHeight="600.0" prefWidth="800.0">
+    <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <padding>
+            <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+        </padding>
+        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets bottom="10.0"/>
+            </VBox.margin>
+        </ListView>
+        <Label fx:id="messageLabel" textFill="red" />
+        <Button text="Back" onAction="#handleBack"/>
+    </VBox>
+</AnchorPane>
