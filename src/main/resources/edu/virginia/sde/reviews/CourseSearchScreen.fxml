@@ -29,6 +29,6 @@
             <Button fx:id="logOutButton" text="Log Out" onAction="#handleLogOut"/>
         </HBox>
 
-        <Label fx:id="messageLabel"/>
+        <Label fx:id="messageLabel" textFill="red"/>
     </VBox>
 </AnchorPane>

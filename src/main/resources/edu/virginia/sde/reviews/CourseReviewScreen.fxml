@@ -15,7 +15,7 @@
         <padding>
             <Insets top="10" right="10" bottom="10" left="10" />
         </padding>
-        <Label fx:id="messageLabel" />
+        <Label fx:id="messageLabel" textFill="red"/>
         <Label fx:id="courseInfoLabel" />
         <Label fx:id="averageRatingLabel" /> <!-- Average Rating -->
 
