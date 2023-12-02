@@ -27,6 +27,7 @@
             <Label text="Comment:" />
             <TextField fx:id="commentField" prefWidth="200" />
             <Button text="Submit Review" onAction="#handleSubmitReview" />
+            <Button text="Edit Review" onAction="#handleEditReview" />
             <Button text="Delete Review" onAction="#handleDeleteReview" />
         </HBox>
 

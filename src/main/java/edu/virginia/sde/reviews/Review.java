@@ -85,9 +85,11 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Rating: " + rating + "/5" + "\n" +
+        return "Rating: " + rating + "/5" + "                               " +
+                "                                                                                                      " +
                 "Date posted: " + entryTime + "\n" +
-                comment + "\n" +
+                comment + "\n" + "                                                  " +
+                "                                                                                                      " +
                 "Last Updated: " + timestamp;
     }
 }

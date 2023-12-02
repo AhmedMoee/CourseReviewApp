@@ -69,10 +69,10 @@ public class CourseReviewController {
 
         try {
             int rating = parseRating();
-//            if (rating == -1) {
-//                messageLabel.setText("Invalid rating. Please enter a number between 1 and 5.");
-//                return;
-//            }
+            if (rating < 1 || rating > 5) {
+                messageLabel.setText("Invalid rating.");
+                return;
+            }
             String comment = commentField.getText();
 
             Optional<Review> existingReview = dbDriver.getReviewFromUserForCourse(currentUser, currentCourse);
@@ -81,25 +81,54 @@ public class CourseReviewController {
 
             if (existingReview.isPresent()) {
                 dbDriver.editReview(existingReview.get(), review);
+                messageLabel.setText("Review updated successfully.");
             } else {
-                System.out.println("Add Review:" + currentCourse.getCourseID());
-                System.out.println(currentUser.getUserID());
                 dbDriver.addReview(review);
+                messageLabel.setText("Review submitted successfully.");
             }
 
             dbDriver.commit();
             loadReviews(); // Reload reviews
-            messageLabel.setText("Review submitted successfully.");
         } catch (NumberFormatException ne) {
             messageLabel.setText("Invalid rating. Please enter a number between 1 and 5.");
-        } catch (IllegalArgumentException e) {
-            messageLabel.setText("Illegal Argument Exception");
         } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Current Course ID: " + currentCourse.getCourseID());
+            System.out.println("Current User ID: " + currentUser.getUserID());
             messageLabel.setText("Error submitting review: " + e.getMessage());
         }
     }
 
+    @FXML
+    protected void handleEditReview() {
+        Review selectedReview = reviewsListView.getSelectionModel().getSelectedItem();
+
+        if (selectedReview == null) {
+            messageLabel.setText("No review selected.");
+            return;
+        }
+        if (currentUser == null) {
+            messageLabel.setText("User not set.");
+            return;
+        }
+
+        // Check if the selected review belongs to the current user
+        if (selectedReview.getUserID() != currentUser.getUserID()) {
+            messageLabel.setText("Cannot edit other users' reviews.");
+            return;
+        }
+
+        // Load existing review details into the form
+        ratingField.setText(String.valueOf(selectedReview.getRating()));
+        commentField.setText(selectedReview.getComment());
+    }
+
     private int parseRating() {
+        if (ratingField.getText().isEmpty()) {
+            messageLabel.setText("Rating cannot be empty.");
+            return -1;
+        }
+
         try {
             int rating = Integer.parseInt(ratingField.getText());
             if (rating < 1 || rating > 5) {
@@ -114,6 +143,23 @@ public class CourseReviewController {
 
     @FXML
     protected void handleDeleteReview() {
+        Review selectedReview = reviewsListView.getSelectionModel().getSelectedItem();
+
+        if (selectedReview == null) {
+            messageLabel.setText("No review selected.");
+            return;
+        }
+        if (currentUser == null) {
+            messageLabel.setText("User not set.");
+            return;
+        }
+
+        // Check if the selected review belongs to the current user
+        if (selectedReview.getUserID() != currentUser.getUserID()) {
+            messageLabel.setText("Cannot delete other users' reviews.");
+            return;
+        }
+
         try {
             dbDriver.removeReview(currentCourse, currentUser);
             dbDriver.commit();

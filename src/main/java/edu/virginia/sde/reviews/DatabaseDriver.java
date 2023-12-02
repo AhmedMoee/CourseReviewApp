@@ -591,8 +591,8 @@ public class DatabaseDriver {
         try {
             String deleteQuery = "DELETE FROM Reviews WHERE CourseID = ? AND UserID = ?";
             PreparedStatement statement = connection.prepareStatement(deleteQuery);
-            statement.setInt(1, getCourseId(course.getSubject(), course.getCourseNumber(), course.getTitle())); // Assuming course.getId() returns the course ID
-            statement.setInt(2, getUserId(user.getUsername())); // Assuming user.getId() returns the user ID
+            statement.setInt(1, getCourseId(course.getSubject(), course.getCourseNumber(), course.getTitle()));
+            statement.setInt(2, getUserId(user.getUsername()));
             int rowsAffected = statement.executeUpdate();
             statement.close();
 
@@ -616,27 +616,23 @@ public class DatabaseDriver {
             throw new IllegalStateException("Connection is not open");
         }
 
-        try {
-            String updateQuery = "UPDATE Reviews SET Rating = ?, EntryTime = ?, Comment = ? " +
-                    "WHERE CourseID = ? AND UserID = ?";
-            PreparedStatement statement = connection.prepareStatement(updateQuery);
-
+        // Update the review
+        String updateQuery = "UPDATE Reviews SET Rating = ?, EntryTime = ?, Comment = ? WHERE UserID = ? AND CourseID = ?";
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
             // Set new values for the review
-            statement.setInt(1, newReview.getRating());
-            statement.setTimestamp(2, newReview.getEntryTime());
+            updateStatement.setInt(1, newReview.getRating());
+            updateStatement.setTimestamp(2, newReview.getEntryTime());
             if (newReview.getComment() != null) {
-                statement.setString(3, newReview.getComment());
+                updateStatement.setString(3, newReview.getComment());
             } else {
-                statement.setNull(3, Types.VARCHAR);
+                updateStatement.setNull(3, Types.VARCHAR);
             }
 
-            // Use the Course ID and User ID from the old review to identify the review to update
-            statement.setInt(4, oldReview.getCourseID());
-            statement.setInt(5, oldReview.getUserID());
+            // Use the User ID and Course ID from the old review to identify the review to update
+            updateStatement.setInt(4, oldReview.getCourseID());
+            updateStatement.setInt(5, oldReview.getUserID());
 
-            int rowsAffected = statement.executeUpdate();
-            statement.close();
-
+            int rowsAffected = updateStatement.executeUpdate();
             if (rowsAffected == 0) {
                 throw new SQLException("No review found for Course ID: " + oldReview.getCourseID()
                         + " and User ID: " + oldReview.getUserID());
@@ -719,8 +715,8 @@ public class DatabaseDriver {
             ResultSet results = statement.executeQuery();
             while (results.next()) {
                 int id = results.getInt("ID");
-                int courseId = results.getInt("CourseID");
                 int userId = results.getInt("UserID");
+                int courseId = results.getInt("CourseID");
                 int rating = results.getInt("Rating");
                 Timestamp time = results.getTimestamp("EntryTime");
                 String comment = results.getString("Comment");
@@ -728,7 +724,7 @@ public class DatabaseDriver {
                     comment = null;
                 }
 
-                Review review = new Review(id, courseId, userId, rating, time, comment);
+                Review review = new Review(id, userId, courseId, rating, time, comment);
                 reviews.add(review);
             }
             statement.close();
@@ -754,8 +750,8 @@ public class DatabaseDriver {
             ResultSet results = statement.executeQuery();
             while (results.next()) {
                 int id = results.getInt("ID");
-                int courseId = results.getInt("CourseID");
                 int userId = results.getInt("UserID");
+                int courseId = results.getInt("CourseID");
                 int rating = results.getInt("Rating");
                 Timestamp time = results.getTimestamp("EntryTime");
                 String comment = results.getString("Comment");
@@ -763,7 +759,7 @@ public class DatabaseDriver {
                     comment = null;
                 }
 
-                Review review = new Review(id, courseId, userId, rating, time, comment);
+                Review review = new Review(id, userId, courseId, rating, time, comment);
                 reviews.add(review);
             }
             statement.close();
@@ -801,18 +797,18 @@ public class DatabaseDriver {
 
     private static setupCourseColumns getSetupCourseColumns(ResultSet results) throws SQLException {
         int id = results.getInt("ID");
-        int courseId = results.getInt("CourseID");
         int userId = results.getInt("UserID");
+        int courseId = results.getInt("CourseID");
         int rating = results.getInt("Rating");
         Timestamp time = results.getTimestamp("EntryTime");
         String comment = results.getString("Comment");
         if (results.wasNull()) {
             comment = null;
         }
-        return new setupCourseColumns(id, courseId, userId, rating, time, comment);
+        return new setupCourseColumns(id, userId, courseId, rating, time, comment);
     }
 
-    private record setupCourseColumns(int id, int courseId, int userId, int rating, Timestamp time, String comment) {
+    private record setupCourseColumns(int id, int userId, int courseId, int rating, Timestamp time, String comment) {
     }
 
     /**
