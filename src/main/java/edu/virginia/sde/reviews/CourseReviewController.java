@@ -15,13 +15,16 @@ public class CourseReviewController {
     @FXML
     private ListView<Review> reviewsListView;
     @FXML
-    private TextField ratingField, commentField;
+    private TextField ratingField;
+    @FXML
+    private TextArea commentField;
 
     private Course currentCourse;
     private User currentUser;
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
     private String previousScene;
+    private boolean editMode = false;
 
     // Setters for application and database driver
     public void setApplication(CourseReviewApplication application) {
@@ -31,7 +34,6 @@ public class CourseReviewController {
     public void setDatabaseDriver() {
         Configuration configuration = new Configuration();
         this.dbDriver = DatabaseDriver.getInstance(configuration.getDatabaseFilename());
-        System.out.println("Database Driver set in CourseReviewController: " + this.dbDriver);
     }
 
     public void setCurrentCourseAndUser(Course course, User user, String previousScene) {
@@ -79,14 +81,19 @@ public class CourseReviewController {
                     rating, new Timestamp(System.currentTimeMillis()), comment);
 
             if (existingReview.isPresent()) {
-                dbDriver.editReview(existingReview.get(), review);
-                messageLabel.setText("Review updated successfully.");
+                if (!editMode) {
+                    messageLabel.setText("You have already submitted a review for this course.");
+                    return;
+                } else {
+                    dbDriver.editReview(existingReview.get(), review);
+                    messageLabel.setText("Review updated successfully.");
+                }
             } else {
                 dbDriver.addReview(review);
                 messageLabel.setText("Review submitted successfully.");
             }
 
-            dbDriver.commit();
+            editMode = false;
             loadReviews(); // Reload reviews
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,7 +115,7 @@ public class CourseReviewController {
                 return null;
             }
         } catch (NumberFormatException e) {
-            messageLabel.setText("Invalid rating format.");
+            messageLabel.setText("Invalid rating format. Please enter a number between 1 and 5.");
             return null;
         }
         return rating;
@@ -133,6 +140,8 @@ public class CourseReviewController {
             return;
         }
 
+        editMode = true;
+        messageLabel.setText("");
         // Load existing review details into the form
         ratingField.setText(String.valueOf(selectedReview.getRating()));
         commentField.setText(selectedReview.getComment());
@@ -159,7 +168,6 @@ public class CourseReviewController {
 
         try {
             dbDriver.removeReview(currentCourse, currentUser);
-            dbDriver.commit();
             loadReviews();
             messageLabel.setText("Review deleted successfully.");
         } catch (SQLException e) {

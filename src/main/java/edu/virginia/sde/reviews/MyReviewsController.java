@@ -17,7 +17,6 @@ public class MyReviewsController {
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
     private User currentUser;
-    String previousScene = "CourseSearchScreen";
 
     public void setApplication(CourseReviewApplication application) {
         this.application = application;
@@ -36,24 +35,58 @@ public class MyReviewsController {
         try {
             List<Review> userReviews = dbDriver.getReviewsFromUser(currentUser);
             reviewsListView.getItems().setAll(userReviews);
+            setCustomCellFactory();
+
         } catch (SQLException e) {
             e.printStackTrace();
             messageLabel.setText("Error loading reviews: " + e.getMessage());
         }
     }
 
+    private void setCustomCellFactory() {
+        reviewsListView.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Review review, boolean empty) {
+                super.updateItem(review, empty);
+                if (empty || review == null) {
+                    setText(null);
+                } else {
+                    displayReview(review);
+                }
+            }
+
+            private void displayReview(Review review) {
+                try {
+                    Course course = dbDriver.getCourseById(review.getCourseID()).orElse(null);
+                    if (course != null) {
+                        String displayText = String.format("%s %d: %s\nRating: %d/5\nComment: %s",
+                                course.getSubject(), course.getCourseNumber(), course.getTitle(),
+                                review.getRating(), review.getComment());
+                        setText(displayText);
+                    }
+                } catch (SQLException e) {
+                    setText("Error loading course details.");
+                }
+            }
+        });
+    }
+
     @FXML
     protected void handleReviewSelect() {
         Review selectedReview = reviewsListView.getSelectionModel().getSelectedItem();
         if (selectedReview != null) {
-            try {
-                dbDriver.getCourseById(selectedReview.getCourseID()).ifPresent(course ->
-                        application.switchToCourseReviewScreen(course, currentUser, "MyReviews")
-                );
-            } catch (SQLException e) {
-                e.printStackTrace();
-                messageLabel.setText("Error loading course: " + e.getMessage());
-            }
+            navigateToCourseReview(selectedReview);
+        }
+    }
+
+    private void navigateToCourseReview(Review selectedReview) {
+        try {
+            dbDriver.getCourseById(selectedReview.getCourseID()).ifPresent(course ->
+                    application.switchToCourseReviewScreen(course, currentUser, "MyReviews")
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+            messageLabel.setText("Error loading course: " + e.getMessage());
         }
     }
 

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.sql.*;
@@ -20,11 +21,19 @@ public class LoginController {
 
     @FXML
     private Label messageLabel;
+    @FXML
+    private AnchorPane rootPane;
 
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
     private User currentUser;
     private CourseSearchController courseSearchController;
+
+    @FXML
+    public void initialize() {
+        // This will move the focus to the root pane when the scene is loaded
+        Platform.runLater(() -> rootPane.requestFocus());
+    }
 
     public LoginController() {
         Configuration configuration = new Configuration();
@@ -45,15 +54,6 @@ public class LoginController {
         this.dbDriver = dbDriver;
     }
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-    }
-
-
-    public void setCourseSearchController(CourseSearchController controller) {
-        this.courseSearchController = controller;
-    }
-
     @FXML
     public void handleLogin(javafx.event.ActionEvent actionEvent) {
         String username = usernameField.getText();
@@ -61,6 +61,10 @@ public class LoginController {
 
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Username or password cannot be empty.");
+            return;
+        }
+        else if (password.length() < 8) {
+            messageLabel.setText("Password must be at least 8 characters long.");
             return;
         }
 
@@ -81,7 +85,7 @@ public class LoginController {
                     });
                 } else {
                     // Invalid password
-                    messageLabel.setText("Invalid password.");
+                    messageLabel.setText("Invalid password. Please try again.");
                 }
             } else {
                 // User does not exist
@@ -100,6 +104,9 @@ public class LoginController {
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Username or password cannot be empty.");
             return;
+        } else if (password.length() < 8) {
+            messageLabel.setText("Password must be at least 8 characters long.");
+            return;
         }
 
         try {
@@ -107,7 +114,6 @@ public class LoginController {
                 messageLabel.setText("User already exists. Please login.");
             } else {
                 dbDriver.addUser(new User(username, password));
-                dbDriver.commit();
                 messageLabel.setText("Registration successful. User created.");
             }
         } catch (SQLException e) {

@@ -4,23 +4,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.virginia.sde.reviews.MyReviewsController"
+            style="-fx-background-color: #202020;"
             prefHeight="600.0" prefWidth="800.0">
-    <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-        <padding>
-            <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
-        </padding>
-        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS">
+    <VBox spacing="20.0" AnchorPane.bottomAnchor="20.0"
+          AnchorPane.leftAnchor="20.0"
+          AnchorPane.rightAnchor="20.0"
+          AnchorPane.topAnchor="20.0"
+          style="-fx-padding: 20; -fx-background-color: #303030; -fx-border-radius: 5;">
+        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: #404040; -fx-border-color: #303030; -fx-border-radius: 5; -fx-text-fill: #E0E0E0;">
             <VBox.margin>
-                <Insets bottom="10.0"/>
+                <Insets bottom="15.0"/>
             </VBox.margin>
         </ListView>
-        <Label fx:id="messageLabel" textFill="red"/>
-        <HBox spacing="5.0">
-            <Button fx:id="selectReviewButton" text="Select Review" onAction="#handleReviewSelect"/>
-            <Button text="Back" onAction="#handleBack"/>
+        <Label fx:id="messageLabel" textFill="#FF6E40" style="-fx-font-size: 14px; -fx-font-family: 'Arial';"/>
+        <HBox spacing="10.0">
+            <Button fx:id="selectReviewButton" text="Select Review" onAction="#handleReviewSelect"
+                    style="-fx-background-color: #5C6BC0; -fx-text-fill: white; -fx-background-radius: 5;"/>
+            <Button text="Back" onAction="#handleBack"
+                    style="-fx-background-color: #5C6BC0; -fx-text-fill: white; -fx-background-radius: 5;"/>
         </HBox>
     </VBox>
 </AnchorPane>

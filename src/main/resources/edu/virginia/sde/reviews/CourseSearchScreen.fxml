@@ -3,32 +3,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.virginia.sde.reviews.CourseSearchController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: #202020;"
+            xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.virginia.sde.reviews.CourseSearchController">
 
-    <VBox spacing="10">
-        <padding>
-            <Insets top="10" right="10" bottom="10" left="10" />
-        </padding>
+    <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #303030;">
         <HBox spacing="5">
-            <TextField fx:id="searchSubjectField" promptText="Subject"/>
-            <TextField fx:id="searchNumberField" promptText="Number"/>
-            <TextField fx:id="searchTitleField" promptText="Title"/>
-            <Button text="Search" onAction="#handleSearch"/>
+            <TextField fx:id="searchSubjectField" promptText="Subject" style="-fx-text-fill: #E0E0E0; -fx-background-color: #404040;" />
+            <TextField fx:id="searchNumberField" promptText="Number" style="-fx-text-fill: #E0E0E0; -fx-background-color: #404040;" />
+            <TextField fx:id="searchTitleField" promptText="Title" style="-fx-text-fill: #E0E0E0; -fx-background-color: #404040;" />
+            <Button onAction="#handleSearch" text="Search" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
         </HBox>
 
-        <ListView fx:id="coursesListView" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="coursesListView" VBox.vgrow="ALWAYS" style="-fx-background-color: #505050; -fx-text-fill: #E0E0E0;"/>
 
         <HBox spacing="5">
-            <Button fx:id="selectCourseButton" text="Select Course" onAction="#handleCourseSelect"/>
-            <Button fx:id="addButton" text="Add Course" onAction="#handleCourseAdd"/>
-            <Button fx:id="myReviewsButton" text="My Reviews" onAction="#handleMyReviews"/>
-            <Button fx:id="logOutButton" text="Log Out" onAction="#handleLogOut"/>
+            <Button fx:id="selectCourseButton" onAction="#handleCourseSelect" text="Select Course" style="-fx-background-color: #5C6BC0; -fx-text-fill: white;"/>
+            <Button fx:id="addButton" onAction="#handleCourseAdd" text="Add Course" style="-fx-background-color: #5C6BC0; -fx-text-fill: white;"/>
+            <Button fx:id="myReviewsButton" onAction="#handleMyReviews" text="My Reviews" style="-fx-background-color: #5C6BC0; -fx-text-fill: white;"/>
+            <Button fx:id="logOutButton" onAction="#handleLogOut" text="Log Out" style="-fx-background-color: #EF5350; -fx-text-fill: white;"/>
         </HBox>
 
-        <Label fx:id="messageLabel" textFill="red"/>
+        <Label fx:id="messageLabel" textFill="#FF6E40" style="-fx-font-size: 16px;"></Label>
     </VBox>
 </AnchorPane>

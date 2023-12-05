@@ -7,31 +7,57 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.virginia.sde.reviews.CourseReviewController"
-            prefHeight="600.0" prefWidth="800.0">
-    <VBox spacing="10">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #202020;"
+            xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.virginia.sde.reviews.CourseReviewController">
+    <VBox spacing="15" alignment="CENTER_LEFT">
         <padding>
-            <Insets top="10" right="10" bottom="10" left="10" />
+            <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
-        <Label fx:id="messageLabel" textFill="red"/>
-        <Label fx:id="courseInfoLabel" />
-        <Label fx:id="averageRatingLabel" /> <!-- Average Rating -->
+        <Label fx:id="courseInfoLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #E0E0E0;">
+            <font>
+                <Font name="Arial" size="18.0" />
+            </font>
+        </Label>
+        <Label fx:id="averageRatingLabel" style="-fx-font-size: 16px; -fx-text-fill: #BDBDBD;">
+            <font>
+                <Font name="Arial" size="16.0" />
+            </font>
+        </Label>
 
-        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS" />
+        <ListView fx:id="reviewsListView" VBox.vgrow="ALWAYS"
+                  style="-fx-background-color: #303030; -fx-control-inner-background: #303030; -fx-text-fill: #E0E0E0;">
+        </ListView>
+        <Label fx:id="messageLabel" style="-fx-font-size: 16px; -fx-text-fill: #FF6E40;">
+            <font>
+                <Font name="Arial" size="16.0" />
+            </font>
+        </Label>
 
-        <HBox spacing="5">
-            <Label text="Rating:" />
-            <TextField fx:id="ratingField" prefWidth="50" />
-            <Label text="Comment:" />
-            <TextField fx:id="commentField" prefWidth="200" />
-            <Button text="Submit Review" onAction="#handleSubmitReview" />
-            <Button text="Edit Review" onAction="#handleEditReview" />
-            <Button text="Delete Review" onAction="#handleDeleteReview" />
+        <HBox spacing="10">
+            <Label text="Rating:" style="-fx-font-size: 14px; -fx-text-fill: #E0E0E0;" />
+            <TextField fx:id="ratingField" prefWidth="50"
+                       style="-fx-font-size: 14px; -fx-background-color: #404040; -fx-text-fill: #E0E0E0;" />
+            <Label text="Comment:" style="-fx-font-size: 14px; -fx-text-fill: #E0E0E0;" />
+            <TextArea fx:id="commentField" prefHeight="54.0" prefWidth="200"
+                      wrapText="true"
+                      style="-fx-font-size: 14px; -fx-background-color: #404040; -fx-text-fill: #E0E0E0;
+                      -fx-control-inner-background: #404040; -fx-padding: 2;" />
+            <Button onAction="#handleSubmitReview" text="Submit Review"
+                    style="-fx-background-color: #5C6BC0; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button onAction="#handleEditReview" text="Edit Review"
+                    style="-fx-background-color: #5C6BC0; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button onAction="#handleDeleteReview" text="Delete Review"
+                    style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-size: 14px;" />
         </HBox>
 
-        <Button text="Back" onAction="#handleBack" />
+        <Button onAction="#handleBack" text="Back" style="-fx-background-color: #5C6BC0; -fx-text-fill: white; -fx-font-size: 14px;" />
     </VBox>
 
 </AnchorPane>
