@@ -12,8 +12,6 @@ import java.sql.SQLException;
 public class CourseReviewApplication extends Application {
     private DatabaseDriver databaseDriver;
     private Stage primaryStage;
-    private CourseSearchController courseSearchController;
-    private User currentUser;
 
     public static void main(String[] args) {
         launch(args);
@@ -50,7 +48,7 @@ public class CourseReviewApplication extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Course Search");
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -66,7 +64,7 @@ public class CourseReviewApplication extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Login");
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -83,7 +81,7 @@ public class CourseReviewApplication extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Course Review");
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
@@ -100,7 +98,7 @@ public class CourseReviewApplication extends Application {
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - My Reviews");
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 

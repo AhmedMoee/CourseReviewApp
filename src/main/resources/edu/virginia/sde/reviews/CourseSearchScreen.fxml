@@ -2,9 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Font?>
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0"
             style="-fx-background-color: #202020;"
             xmlns="http://javafx.com/javafx/17.0.9"
@@ -28,6 +25,6 @@
             <Button fx:id="logOutButton" onAction="#handleLogOut" text="Log Out" style="-fx-background-color: #EF5350; -fx-text-fill: white;"/>
         </HBox>
 
-        <Label fx:id="messageLabel" textFill="#FF6E40" style="-fx-font-size: 16px;"></Label>
+        <Label fx:id="messageLabel" textFill="#FF6E40" style="-fx-font-size: 16px;"/>
     </VBox>
 </AnchorPane>

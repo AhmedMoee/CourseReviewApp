@@ -26,8 +26,6 @@ public class LoginController {
 
     private DatabaseDriver dbDriver;
     private CourseReviewApplication application;
-    private User currentUser;
-    private CourseSearchController courseSearchController;
 
     @FXML
     public void initialize() {

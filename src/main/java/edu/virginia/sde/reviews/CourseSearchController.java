@@ -11,19 +11,11 @@ import java.util.stream.Collectors;
 public class CourseSearchController {
 
     @FXML
-    private TextField searchSubjectField;
-    @FXML
-    private TextField searchNumberField;
-    @FXML
-    private TextField searchTitleField;
+    private TextField searchSubjectField, searchNumberField, searchTitleField;
     @FXML
     private ListView<Course> coursesListView;
     @FXML
-    private Button logOutButton;
-    @FXML
-    private Button myReviewsButton;
-    @FXML
-    private Button addButton;
+    private Button logOutButton, myReviewsButton, addButton, selectCourseButton;
     @FXML
     private Label messageLabel;
 
