@@ -38,7 +38,6 @@ public class MyReviewsController {
             setCustomCellFactory();
 
         } catch (SQLException e) {
-            e.printStackTrace();
             messageLabel.setText("Error loading reviews: " + e.getMessage());
         }
     }
@@ -85,7 +84,6 @@ public class MyReviewsController {
                     application.switchToCourseReviewScreen(course, currentUser, "MyReviews")
             );
         } catch (SQLException e) {
-            e.printStackTrace();
             messageLabel.setText("Error loading course: " + e.getMessage());
         }
     }

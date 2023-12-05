@@ -44,7 +44,6 @@ public class CourseSearchController {
         this.currentUser = user;
     }
 
-    // Initialize method
     @FXML
     public void initialize() {
         Configuration configuration = new Configuration();
@@ -60,10 +59,8 @@ public class CourseSearchController {
     private void loadCourses() {
         try {
             List<Course> courses = dbDriver.getAllCoursesWithRatings();
-            // You might want to calculate average ratings for these courses here
             coursesListView.getItems().setAll(courses);
         } catch (SQLException e) {
-            e.printStackTrace();
             messageLabel.setText("Unable to load courses.");
         }
     }
@@ -88,7 +85,7 @@ public class CourseSearchController {
             } else if (!numberStr.isEmpty() && numberStr.length() != 4) {
                 messageLabel.setText("Invalid course number. Please enter a 4 digit course number.");
                 return;
-            } else if (!title.isEmpty() && title.length() > 50) {
+            } else if (title.length() > 50) {
                 messageLabel.setText("Title cannot be longer than 50 characters.");
                 return;
             }
@@ -144,7 +141,6 @@ public class CourseSearchController {
 
     @FXML
     protected void handleCourseAdd(ActionEvent event) {
-        // Implement course add logics
         String subject = searchSubjectField.getText().trim().toUpperCase(); // Convert to uppercase
         String numberStr = searchNumberField.getText().trim();
         String title = searchTitleField.getText().trim();
@@ -180,7 +176,6 @@ public class CourseSearchController {
                 messageLabel.setText("Course already exists.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             messageLabel.setText("Unable to add course.");
         } catch (NumberFormatException e) {
             messageLabel.setText("Invalid course number. Please enter a 4 digit course number.");
@@ -210,7 +205,6 @@ public class CourseSearchController {
 
     @FXML
     protected void handleMyReviews(ActionEvent event) {
-        // Implement navigation to My Reviews screen
         if (this.application != null) {
             application.switchToMyReviewsScreen(currentUser);
         } else {

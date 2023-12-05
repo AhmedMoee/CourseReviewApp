@@ -380,7 +380,6 @@ public class DatabaseDriver {
         } catch (SQLException e) {
             System.err.println("Error in addReview: " + e.getMessage());
             System.err.println("Review details: UserID=" + review.getUserID() + ", CourseID=" + review.getCourseID());
-            e.printStackTrace();
             rollback();
             throw e;
         }

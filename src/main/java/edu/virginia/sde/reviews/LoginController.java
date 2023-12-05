@@ -31,7 +31,6 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // This will move the focus to the root pane when the scene is loaded
         Platform.runLater(() -> rootPane.requestFocus());
     }
 
@@ -74,13 +73,13 @@ public class LoginController {
                 if (storedPassword.isPresent() && storedPassword.get().equals(password)) {
                     // Login successful - proceed to next scene
                     messageLabel.setText("Login successful.");
-                    User currentUser = dbDriver.getUserByUsername(username).orElseThrow(() -> new SQLException("User not found"));
+                    User currentUser = dbDriver.getUserByUsername(username).orElseThrow(() ->
+                            new SQLException("User not found"));
                     Platform.runLater(() -> {
                         try {
                             application.switchToCourseSearch(currentUser);
                         } catch (Exception e) {
                             messageLabel.setText("Error while switching to course search screen.");
-                            e.printStackTrace();
                         }
                     });
                 } else {
@@ -122,7 +121,6 @@ public class LoginController {
             } catch (SQLException ex) {
                 messageLabel.setText("Error while creating user.");
             }
-            e.printStackTrace();
             messageLabel.setText("Error while creating user.");
         }
 

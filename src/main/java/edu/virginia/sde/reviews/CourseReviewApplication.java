@@ -51,7 +51,6 @@ public class CourseReviewApplication extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Course Search");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -68,7 +67,6 @@ public class CourseReviewApplication extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Login");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -86,7 +84,6 @@ public class CourseReviewApplication extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - Course Review");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -104,7 +101,6 @@ public class CourseReviewApplication extends Application {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Course Review Application - My Reviews");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

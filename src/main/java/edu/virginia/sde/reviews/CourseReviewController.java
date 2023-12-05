@@ -26,7 +26,6 @@ public class CourseReviewController {
     private String previousScene;
     private boolean editMode = false;
 
-    // Setters for application and database driver
     public void setApplication(CourseReviewApplication application) {
         this.application = application;
     }
@@ -96,7 +95,6 @@ public class CourseReviewController {
             editMode = false;
             loadReviews(); // Reload reviews
         } catch (SQLException e) {
-            e.printStackTrace();
             messageLabel.setText("Error submitting review: " + e.getMessage());
         }
     }
